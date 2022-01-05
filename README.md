@@ -4,13 +4,15 @@ Perhaps you've played Wordle (https://www.powerlanguage.co.uk/wordle/) - well, `
 # design / TODO 
 
 - Get a list of valid words 
-  - Import dict.txt 
+  - Import wordlist.txt 
   - Strip out words of length != 5
-  - Later: strip out simple/obvious plurals of four-letter words 
+  - Save the resulting list as `5letters.txt`
+  - Easy on-the-way target: split the dictionary up by length and save `Nletters` for N = 3 to 8
 - Choose a good word 
   - Choose randomly
-  - Later: use a repeatable seed e.g. UTC modulo number of entries in dict.txt 
-  - Later: display the repeatable seed so others can play 
+  - Later: Investigate whether removing simple plurals from the dictionary helps to devalue `S` and make the game more fun 
+  - Later: use a repeatable seed e.g. UTC rounded to the hour (?), modulo number of entries in wordlist.txt 
+  - Later: display the repeatable seed so others can play the same game
   - Later: choose words with statistically unusual properties 
 - Accept user input 
   - Only letters, no numeric / specials  
