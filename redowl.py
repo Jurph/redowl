@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-class Wordle():
+class Wordle(object):
     def __init__(self, length=5):
         self.length = length
         self.score = [0, 0, 0, 0, 0]
@@ -12,13 +12,12 @@ class Wordle():
         # Handle file I/O here 
         return
 
-
     def eval(self, word):
         # set self.score based on positional letters
         # 0 for a letter which does not appear
         # 1 for a letter which appears in a different position
         # 2 for a letter which is correctly placed 
-        if self.score = [2, 2, 2, 2, 2]:
+        if self.score == [2, 2, 2, 2, 2]:
             self.isSolved = True
         return
 
@@ -28,10 +27,11 @@ class Wordle():
         # print an all-caps letter in green for a score of 2
         return
 
+
 def main():
     w = Wordle(5)
     w.fromFile('wordlist.txt')
-    while w.isSolved == False:
+    while not w.isSolved:
         guess = input()
         w.eval(guess)
         w.printscore()
