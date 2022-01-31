@@ -5,11 +5,14 @@ class Wordle(object):
         self.length = length
         self.score = [0, 0, 0, 0, 0]
         self.isSolved = False
+        self.wordbank = []
         self.word = ""
         return
 
-    def fromFile(self, filename):
-        # Handle file I/O here 
+    def fromFile(self, filename):   
+        # TODO: "filename" probably needs to be a Path or Pathlike object for robustness 
+        with open(filename,'r') as fh:
+            self.wordbank = fh.readlines()
         return
 
     def eval(self, word):
