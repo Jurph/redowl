@@ -13,10 +13,8 @@ class Wordle(object):
         return
 
     def fromFile(self, filename):   
-        # TODO: "filename" probably needs to be a Path or Pathlike object for robustness 
-        with open(filename,'r') as fh:
-            self.wordbank = fh.readlines()
-
+        self.wordbank = [line.rstrip() for line in open(filename)]
+        print("Initializing word bank... there are {} valid words.".format(len(self.wordbank)))
         random.seed(self.seed)
         self.word = random.choice(self.wordbank)
         return
@@ -50,20 +48,23 @@ def sanitize(self, string):
 def main():
     # TODO: accept command line args for initialization
     # -d    : debug, prints answer up front
-    # -f    : fast, seeds random with (day,hour,minute,second) precision 
+    # -f    : file, accepts an input dictionary other than the standard one 
+    # -r    : random, forces the game not to use today's seed 
+    # -s    : seed, forces a specific puzzle number (???)
+    # -l    : length, lets you use a different word length 
 
     # Initialize the game 
     now = datetime.datetime.now()
     seed = now.day
     length = 5
     w = Wordle(length, seed)
-    w.fromFile('wordlist.txt')
+    w.fromFile('5letters.txt')
     guess = ""
     tries = 0
 
     # Play the game 
     while not w.isSolved:
-        guess = input().sanitize()
+        guess = input().strip("").lower()
         # TODO: check length *after* sanitizing 
         if guess in w.wordbank:
             w.eval(guess)
@@ -72,6 +73,7 @@ def main():
             print("No Guess (wrong length)")
         else:
             print("No Guess (not in our word bank)")
+    print("You Win! The word was \x1b[1;32;40m{}\x1b[0m! It only took you {} tries.".format(w.word.upper(), tries))
     return
 
 
