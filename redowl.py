@@ -1,9 +1,10 @@
 #!/usr/bin/python3
+import click
 import random
 import datetime
 
 class Wordle(object):
-    def __init__(self, length=5, seed = 420):
+    def __init__(self, length=5, seed=None):
         self.length = length
         self.seed = seed
         self.score = [0, 0, 0, 0, 0]
@@ -13,8 +14,9 @@ class Wordle(object):
         self.word = ""
         return
 
-    def fromFile(self, filename):   
-        self.wordbank = [line.rstrip() for line in open(filename)]
+    def fromFiles(self, bankfile="valid.txt", dictfile="canon.txt"):   
+        self.wordbank = [line.rstrip() for line in open(bankfile)]
+        self.dictionary = [line.rstrip() for line in open(dictfile)]
         print("Initializing word bank... there are {} valid words.".format(len(self.wordbank)))
         random.seed(self.seed)
         self.word = random.choice(self.wordbank)
@@ -46,35 +48,38 @@ def sanitize(self, string):
     newstring = string.strip(" ").lower()
     return newstring
 
-def main():
-    # TODO: accept command line args for initialization
-    # -d    : debug, prints answer up front
-    # -f    : file, accepts an input dictionary other than the standard one 
-    # -r    : random, forces the game not to use today's seed 
-    # -s    : seed, forces a specific puzzle number (???)
-    # -l    : length, lets you use a different word length 
+@click.command()
+@click.option('-d', '--debug', is_flag=True, default=False)
+@click.option('-f', '--file', default='valid.txt')
+@click.option('-l', '--length', default=5, type=int)
+@click.option('-r', '--random', is_flag=True, default=False)
+@click.option('-s', '--seed')
+def main(debug, file, length, random, seed):
 
     # Initialize the game 
-    now = datetime.datetime.now()
-    seed = now.day
-    length = 5
+    if not seed:
+        if not random:
+            now = datetime.datetime.now()
+            seed = now.day
     w = Wordle(length, seed)
-    w.fromFile('canon.txt')
+    w.fromFiles('valid.txt', 'canon.txt')
     guess = ""
     tries = 0
 
     # Play the game 
+    if debug:
+        click.echo("DEBUG: the word for Seed #{} is {}".format(w.seed, w.word.upper()))
     while not w.isSolved:
         guess = input().strip("").lower()
         # TODO: check length *after* sanitizing 
-        if guess in w.wordbank:
+        if guess in w.dictionary:
             w.eval(guess)
             tries += 1
         elif len(guess) != length:
-            print("No Guess (wrong length)")
+            click.echo("No Guess (wrong length)")
         else:
-            print("No Guess (not in our dictionary)")
-    print("You Win! The word was \x1b[1;32;40m{}\x1b[0m! It only took you {} tries.".format(w.word.upper(), tries))
+            click.echo("No Guess (not in our dictionary)")
+    click.echo("You Win! The word was \x1b[1;32;40m{}\x1b[0m! It only took you {} tries.".format(w.word.upper(), tries))
     return
 
 

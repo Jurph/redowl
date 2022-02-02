@@ -4,11 +4,11 @@ Perhaps you've played Wordle (https://www.powerlanguage.co.uk/wordle/) - well, `
 # design / TODO 
 
 - Let user set up parameters of the game 
-  - [d]ebug mode should print the answer before playing 
-  - [r]andom mode should not standardize the seed 
-  - [s]eed should let users specify a seed 
-  - [f]ile should let you use any input file 
-  - [l]ength should allow users to choose a new word length 
+  - [d]ebug mode should print the answer before playing [X]
+  - [r]andom mode should not standardize the seed [X]
+  - [s]eed should let users specify a seed [X]
+  - [f]ile should let you use any input file [X]
+  - [l]ength should allow users to choose a new word length [X]
 - Get a list of valid words 
   - Import wordlist.txt [X]
   - Import arbitrary file
