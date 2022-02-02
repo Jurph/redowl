@@ -8,7 +8,8 @@ class Wordle(object):
         self.seed = seed
         self.score = [0, 0, 0, 0, 0]
         self.isSolved = False
-        self.wordbank = []
+        self.wordbank = []      # "Wordbank" is words that can be the answer 
+        self.dictionary = []    # "Dictionary" is words that are legal to guess 
         self.word = ""
         return
 
@@ -58,7 +59,7 @@ def main():
     seed = now.day
     length = 5
     w = Wordle(length, seed)
-    w.fromFile('5letters.txt')
+    w.fromFile('canon.txt')
     guess = ""
     tries = 0
 
@@ -72,7 +73,7 @@ def main():
         elif len(guess) != length:
             print("No Guess (wrong length)")
         else:
-            print("No Guess (not in our word bank)")
+            print("No Guess (not in our dictionary)")
     print("You Win! The word was \x1b[1;32;40m{}\x1b[0m! It only took you {} tries.".format(w.word.upper(), tries))
     return
 
