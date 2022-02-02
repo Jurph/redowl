@@ -49,8 +49,10 @@ def sanitize(self, string):
     return newstring
 
 @click.command()
+# TODO: run in "Canonical" mode where it chooses the same word as the official web app 
+#@click.option('-c', '--canon', is_flag=True, default=False)
 @click.option('-d', '--debug', is_flag=True, default=False)
-@click.option('-f', '--file', default='valid.txt')
+@click.argument('-f', '--file', default='valid.txt')
 @click.option('-l', '--length', default=5, type=int)
 @click.option('-r', '--random', is_flag=True, default=False)
 @click.option('-s', '--seed')
@@ -60,7 +62,7 @@ def main(debug, file, length, random, seed):
     if not seed:
         if not random:
             now = datetime.datetime.now()
-            seed = now.day
+            seed = ((now.year - 2000)*365) + now.month*12 + now.day
     w = Wordle(length, seed)
     w.fromFiles('valid.txt', 'canon.txt')
     guess = ""
@@ -80,6 +82,7 @@ def main(debug, file, length, random, seed):
         else:
             click.echo("No Guess (not in our dictionary)")
     click.echo("You Win! The word was \x1b[1;32;40m{}\x1b[0m! It only took you {} tries.".format(w.word.upper(), tries))
+    click.echo("This was seed #{} -- you can replay this level using the '-s' command line flag.".format(seed))
     return
 
 
