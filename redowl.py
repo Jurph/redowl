@@ -52,7 +52,7 @@ def sanitize(self, string):
 # TODO: run in "Canonical" mode where it chooses the same word as the official web app 
 #@click.option('-c', '--canon', is_flag=True, default=False)
 @click.option('-d', '--debug', is_flag=True, default=False)
-@click.argument('-f', '--file', default='valid.txt')
+@click.option('-f', '--file', default='valid.txt')
 @click.option('-l', '--length', default=5, type=int)
 @click.option('-r', '--random', is_flag=True, default=False)
 @click.option('-s', '--seed')
@@ -60,9 +60,11 @@ def main(debug, file, length, random, seed):
 
     # Initialize the game 
     if not seed:
+        now = datetime.datetime.now()
         if not random:
-            now = datetime.datetime.now()
-            seed = ((now.year - 2000)*365) + now.month*12 + now.day
+            seed = ((now.year - 2000)*365) + now.month*12 + now.day # One unique seed each day
+        else:
+            seed = (now.year * now.second + now.minute * now.hour + now.second * 16381) % 65535
     w = Wordle(length, seed)
     w.fromFiles('valid.txt', 'canon.txt')
     guess = ""
