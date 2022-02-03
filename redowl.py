@@ -16,6 +16,7 @@ class Wordle(object):
         return
 
     def fromFiles(self, bankfile="valid.txt", dictfile="canon.txt"):   
+        # TODO: for "Canonical" mode, figure out today's date and the offset within the canonical file 
         self.wordbank = [line.rstrip() for line in open(bankfile)]
         self.dictionary = [line.rstrip() for line in open(dictfile)]
         print("Initializing word bank... there are {} valid words.".format(len(self.wordbank)))
