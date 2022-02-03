@@ -7,8 +7,9 @@ class Wordle(object):
     def __init__(self, seed, length=5):
         self.length = length
         self.seed = seed
-        self.score = [0, 0, 0, 0, 0]
+        self.score = [0]*length
         self.isSolved = False
+        self.isCanonical = False
         self.wordbank = []      # "Wordbank" is words that can be the answer 
         self.dictionary = []    # "Dictionary" is words that are legal to guess 
         self.word = ""
@@ -39,7 +40,7 @@ class Wordle(object):
                 self.score[i] = 0
                 scorestring += dim + guess[i].upper() + end
         print(scorestring)
-        if self.score == [2, 2, 2, 2, 2]:
+        if self.score == [2]*self.length:
             self.isSolved = True
 
         return
@@ -62,9 +63,11 @@ def main(debug, file, length, random, seed):
     if not seed:
         now = datetime.datetime.now()
         if not random:
-            seed = int((((now.year - 2000)*365) + now.month*12 + now.day) % 65535) # One unique seed each day
+            # Generate a random selection that will remain static for the entire day
+            seed = int((((now.year - 2000)*365) + now.month*12 + now.day) % 65535)
             print("Today's seed: #{}".format(seed))
         else:
+            # Generate enough entropy such that "cheating" requires more work than winning 
             seed = int((now.year * now.second + now.minute * now.hour + now.second * 16381) % 65535)
             print("Random seed selected: #{}".format(seed))
     w = Wordle(seed, length)
