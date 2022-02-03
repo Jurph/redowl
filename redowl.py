@@ -53,11 +53,11 @@ def sanitize(self, string):
 @click.command()
 # TODO: run in "Canonical" mode where it chooses the same word as the official web app 
 #@click.option('-c', '--canon', is_flag=True, default=False)
-@click.option('-d', '--debug', is_flag=True, default=False)
-@click.option('-f', '--file', default='valid.txt')
-@click.option('-l', '--length', default=5, type=int)
-@click.option('-r', '--random', is_flag=True, default=False)
-@click.option('-s', '--seed', type=int)
+@click.option('-d', '--debug', is_flag=True, default=False, help='Displays the answer in advance, for debugging or cheating purposes')
+@click.option('-f', '--file', default='valid.txt', help='Specify a file of words that can be the solution. Valid.txt is the list from the Wordle website.')
+@click.option('-l', '--length', default=5, type=int, help='Specify the length of the words to generate. (Feb 2022: this will require a new dictionary and wordbank).')
+@click.option('-r', '--random', is_flag=True, default=False, help='Force a random word each time, instead of using the word of the day.')
+@click.option('-s', '--seed', type=int, help='Specify a specific random seed, so you can play an identical game with a friend. For now this does not correspond to "Wordle #NNN" but in [c]anonical mode it will someday.')
 def main(debug, file, length, random, seed):
 
     # Initialize the game 
