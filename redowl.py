@@ -4,7 +4,7 @@ import random
 import datetime
 
 class Wordle(object):
-    def __init__(self, length=5, seed=None):
+    def __init__(self, seed, length=5):
         self.length = length
         self.seed = seed
         self.score = [0, 0, 0, 0, 0]
@@ -55,17 +55,19 @@ def sanitize(self, string):
 @click.option('-f', '--file', default='valid.txt')
 @click.option('-l', '--length', default=5, type=int)
 @click.option('-r', '--random', is_flag=True, default=False)
-@click.option('-s', '--seed')
+@click.option('-s', '--seed', type=int)
 def main(debug, file, length, random, seed):
 
     # Initialize the game 
     if not seed:
         now = datetime.datetime.now()
         if not random:
-            seed = ((now.year - 2000)*365) + now.month*12 + now.day # One unique seed each day
+            seed = int((((now.year - 2000)*365) + now.month*12 + now.day) % 65535) # One unique seed each day
+            print("Today's seed: #{}".format(seed))
         else:
-            seed = (now.year * now.second + now.minute * now.hour + now.second * 16381) % 65535
-    w = Wordle(length, seed)
+            seed = int((now.year * now.second + now.minute * now.hour + now.second * 16381) % 65535)
+            print("Random seed selected: #{}".format(seed))
+    w = Wordle(seed, length)
     w.fromFiles('valid.txt', 'canon.txt')
     guess = ""
     tries = 0
