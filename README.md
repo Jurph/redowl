@@ -37,3 +37,4 @@ Perhaps you've played Wordle (https://www.powerlanguage.co.uk/wordle/) - well, `
   - Later: display a “grade” for the guess, showing how many words the guess eliminated 
 - Show output [X]
   - "Judge" the number of tries it took 
+  - Print the BOXES! 
