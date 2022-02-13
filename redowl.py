@@ -13,6 +13,7 @@ class Wordle(object):
         self.wordbank = []      # "Wordbank" is words that can be the answer 
         self.dictionary = []    # "Dictionary" is words that are legal to guess 
         self.word = ""
+        self.alphabet = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'
         return
 
     def fromFiles(self, bankfile="valid.txt", dictfile="canon.txt"):   
@@ -26,25 +27,43 @@ class Wordle(object):
 
     def eval(self, guess):
         scorestring = ""
-        yellow = '\x1b[1;33;40m'
-        green = '\x1b[1;32;40m'
-        dim = '\x1b[1;30;40m'
-        end = '\x1b[0m'
         for i in range(self.length):
             if guess[i] == self.word[i]: # 2 for a letter which is correctly placed 
                 self.score[i] = 2
-                scorestring += green + guess[i].upper() + end
+                newletter = paint(guess[i].upper(), 'green')
+                self.alphabet = self.alphabet.replace(guess[i].upper(), newletter, 1)
             elif guess[i] in self.word:  # 1 for a letter which appears in a different position
                 self.score[i] = 1
-                scorestring += yellow + guess[i].upper() + end
+                newletter = paint(guess[i].upper(), 'yellow')
             else:                        # 0 for a letter which does not appear
                 self.score[i] = 0
-                scorestring += dim + guess[i].upper() + end
-        print(scorestring)
+                newletter = paint(guess[i].upper(), 'gray')
+            scorestring += newletter
+            self.alphabet = self.alphabet.replace(guess[i], newletter, 1) # TODO: this totally goes apeshit if you guess an 'm' - consider alphabet as a list
+            # ...because of the 'M' in the format string
+        print(scorestring, ' - ', self.alphabet)
         if self.score == [2]*self.length:
             self.isSolved = True
-
         return
+
+def paint(letter, color):
+    letter = str(letter[0])
+    yellow = '\x1b[1;33;40m'
+    green = '\x1b[1;32;40m'
+    dim = '\x1b[1;30;40m'
+    end = '\x1b[0m'
+    newletter = ""
+    if color.lower() == 'green':
+        newletter = green + letter + end
+    elif color.lower() == 'yellow':
+        newletter = yellow + letter + end
+    elif color.lower() == 'gray':
+        newletter = dim + letter + end
+    elif color.lower() == 'grey':
+        newletter = dim + letter + end
+    else:
+        return letter
+    return newletter
 
 def sanitize(self, string):
     newstring = string.strip(" ").lower()
